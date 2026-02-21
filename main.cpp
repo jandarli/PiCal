@@ -6,6 +6,7 @@
 #include <QCalendarWidget>
 #include <QDateTime>
 #include <QTimer>
+#include <QPushButton>
 
 #include "customcalendar.h"
 
@@ -38,6 +39,21 @@ int main(int argc, char *argv[]) {
 
     // Calendar
     CustomCalendar *calendar = new CustomCalendar();
+
+    QPushButton *prevBtn = new QPushButton("◀");
+    QPushButton *nextBtn = new QPushButton("▶");
+
+    QObject::connect(prevBtn, &QPushButton::clicked, calendar, &CustomCalendar::showPreviousMonth);
+    QObject::connect(nextBtn, &QPushButton::clicked, calendar, &CustomCalendar::showNextMonth);
+
+    headerLayout->insertWidget(0, prevBtn);
+    headerLayout->insertWidget(2, nextBtn);
+
+    QObject::connect(calendar, &CustomCalendar::currentPageChanged, [=](int year, int month) {
+        QDate newDate(year, month, 1);
+        dateLabel->setText(newDate.toString("MMMM yyyy"));
+    });
+
     calendar->setNavigationBarVisible(false);
     calendar->setVerticalHeaderFormat(QCalendarWidget::NoVerticalHeader);
 
