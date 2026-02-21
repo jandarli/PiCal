@@ -7,6 +7,8 @@
 #include <QDateTime>
 #include <QTimer>
 
+#include "customcalendar.h"
+
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
     QWidget window;
@@ -35,10 +37,8 @@ int main(int argc, char *argv[]) {
     headerLayout->addWidget(clockLabel);
 
     // Calendar
-    QCalendarWidget *calendar = new QCalendarWidget();
+    CustomCalendar *calendar = new CustomCalendar();
     calendar->setNavigationBarVisible(false);
-
-    calendar->setSelectionMode(QCalendarWidget::NoSelection);
     calendar->setVerticalHeaderFormat(QCalendarWidget::NoVerticalHeader);
 
     calendar->setGridVisible(true);
@@ -64,7 +64,6 @@ int main(int argc, char *argv[]) {
     );
 
     calendar->setHorizontalHeaderFormat(QCalendarWidget::ShortDayNames);
-
 
     mainLayout->addLayout(headerLayout);
     mainLayout->addWidget(calendar);
