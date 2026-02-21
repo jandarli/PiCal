@@ -37,6 +37,11 @@ int main(int argc, char *argv[]) {
     // Calendar
     QCalendarWidget *calendar = new QCalendarWidget();
     calendar->setNavigationBarVisible(false);
+
+    calendar->setSelectionMode(QCalendarWidget::NoSelection);
+    calendar->setVerticalHeaderFormat(QCalendarWidget::NoVerticalHeader);
+    calendar->setHorizontalHeaderFormat(QCalendarWidget::SingleLetterDayNames);
+    calendar->setGridVisible(true);
     
     mainLayout->addLayout(headerLayout);
     mainLayout->addWidget(calendar);
