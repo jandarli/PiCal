@@ -40,9 +40,32 @@ int main(int argc, char *argv[]) {
 
     calendar->setSelectionMode(QCalendarWidget::NoSelection);
     calendar->setVerticalHeaderFormat(QCalendarWidget::NoVerticalHeader);
-    calendar->setHorizontalHeaderFormat(QCalendarWidget::SingleLetterDayNames);
+
     calendar->setGridVisible(true);
-    
+    calendar->setStyleSheet(
+        "QCalendarWidget QTableView {"
+        "background-color: #8B0000;"
+        "alternate-background-color: #8B0000;" 
+        "selection-background-color: #00FF00;" 
+        "}"
+        
+        "QCalendarWidget QHeaderView,"
+        "QCalendarWidget QHeaderView::section,"
+        "QCalendarWidget QWidget#qt_calendar_navigationbar {"
+        "background-color: #8B0000;" 
+        "color: white;"
+        "border: 1px solid white;"
+        "}"
+
+        "QCalendarWidget QAbstractItemView {"
+        "gridline-color: white;"
+        "border: 1px solid white;"
+        "}"  
+    );
+
+    calendar->setHorizontalHeaderFormat(QCalendarWidget::ShortDayNames);
+
+
     mainLayout->addLayout(headerLayout);
     mainLayout->addWidget(calendar);
 
