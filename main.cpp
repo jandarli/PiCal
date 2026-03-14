@@ -7,13 +7,14 @@
 #include <QDateTime>
 #include <QTimer>
 #include <QPushButton>
+#include <QTextCharFormat>
 
 #include "customcalendar.h"
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
     QWidget window;
-    window.setStyleSheet("background-color: #8B0000; color: white; font-family: 'monospace';");
+    window.setStyleSheet("background-color: #8B0000; color: white; font-family: 'monospace'; font-size: 22px;");
 
     QVBoxLayout *mainLayout = new QVBoxLayout(&window);
     QHBoxLayout *headerLayout = new QHBoxLayout();
@@ -24,6 +25,10 @@ int main(int argc, char *argv[]) {
     // Digital Clock Label
     QLabel *clockLabel = new QLabel(QTime::currentTime().toString("hh:mm:ss"));
     
+    // Current Month/Day Label
+    QLabel *monthDayLabel = new QLabel(QDate::currentDate().toString("M/d"));
+    monthDayLabel->setStyleSheet("font-weight: bold; margin-right: 10px;");
+
     // Timer to update clock every second
     QTimer *timer = new QTimer(&window);
 
@@ -36,12 +41,36 @@ int main(int argc, char *argv[]) {
     headerLayout->addWidget(dateLabel);
     headerLayout->addStretch();
     headerLayout->addWidget(clockLabel);
+    headerLayout->addWidget(monthDayLabel);
+
 
     // Calendar
     CustomCalendar *calendar = new CustomCalendar();
 
+    QTextCharFormat whiteFormat;
+    whiteFormat.setForeground(Qt::white);
+    calendar->setWeekdayTextFormat(Qt::Saturday, whiteFormat);
+    calendar->setWeekdayTextFormat(Qt::Sunday, whiteFormat);
+
     QPushButton *prevBtn = new QPushButton("◀");
     QPushButton *nextBtn = new QPushButton("▶");
+
+    QString arrowStyle = 
+        "QPushButton {"
+        "   background: transparent;"
+        "   border: none;"
+        "   padding: 0px;"
+        "   margin: 0px;"
+        "   color: white;"
+        "   font-size: 32px;"
+        "   padding-bottom: 8px;"
+        "}";
+
+    prevBtn->setStyleSheet(arrowStyle);
+    nextBtn->setStyleSheet(arrowStyle);
+
+    prevBtn->setFixedWidth(30);
+    nextBtn->setFixedWidth(30);
 
     QObject::connect(prevBtn, &QPushButton::clicked, calendar, &CustomCalendar::showPreviousMonth);
     QObject::connect(nextBtn, &QPushButton::clicked, calendar, &CustomCalendar::showNextMonth);
@@ -75,11 +104,14 @@ int main(int argc, char *argv[]) {
 
         "QCalendarWidget QAbstractItemView {"
         "gridline-color: white;"
-        "border: 1px solid white;"
+        "border-top: 1px solid white;"
+        "border-left: 1px solid white;"
+        "border-right: 0px;"
+        "border-bottom: 0px;"
         "}"  
     );
 
-    calendar->setHorizontalHeaderFormat(QCalendarWidget::ShortDayNames);
+    calendar->setHorizontalHeaderFormat(QCalendarWidget::LongDayNames);
 
     mainLayout->addLayout(headerLayout);
     mainLayout->addWidget(calendar);
