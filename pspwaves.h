@@ -3,6 +3,7 @@
 
 #include <QPainter>
 #include <QPainterPath>
+#include <QLinearGradient>
 #include <cmath>
 
 inline void drawPSPWaves(QPainter *painter, const QRect &clipRect, const QRect &canvasRect, double phase)
@@ -17,15 +18,15 @@ inline void drawPSPWaves(QPainter *painter, const QRect &clipRect, const QRect &
 
     struct Band { double yFrac, ampFrac, freq; int alpha; };
     const Band bands[] = {
-        {0.18, 0.09, 1.0, 160},
-        {0.46, 0.12, 0.7, 180},
-        {0.74, 0.09, 1.2, 150},
+        {0.18, 0.09, 1.0, 65},
+        {0.46, 0.11, 0.7, 70},
+        {0.74, 0.09, 1.2, 60},
     };
 
     for (const auto &b : bands) {
         const double cy  = canvasRect.top() + b.yFrac * H;
         const double amp = b.ampFrac * H;
-        const double bw  = H * 0.09;
+        const double bw  = H * 0.07;
 
         QPainterPath path;
         for (int x = 0; x <= static_cast<int>(W); ++x) {
@@ -38,7 +39,14 @@ inline void drawPSPWaves(QPainter *painter, const QRect &clipRect, const QRect &
             path.lineTo(canvasRect.left() + x, y);
         }
         path.closeSubpath();
-        painter->fillPath(path, QColor(200, 50, 50, b.alpha));
+
+        // Fade the band in/out vertically so edges are soft rather than hard-cut
+        QLinearGradient grad(0, cy - amp, 0, cy + amp + bw);
+        grad.setColorAt(0.0, QColor(230, 110, 110, 0));
+        grad.setColorAt(0.3, QColor(230, 110, 110, b.alpha));
+        grad.setColorAt(0.7, QColor(230, 110, 110, b.alpha));
+        grad.setColorAt(1.0, QColor(230, 110, 110, 0));
+        painter->fillPath(path, grad);
     }
 
     painter->restore();
