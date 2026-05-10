@@ -130,6 +130,15 @@ int main(int argc, char *argv[]) {
 
     calendar->setHorizontalHeaderFormat(QCalendarWidget::LongDayNames);
 
+    // Wave animation 30fps
+    QTimer *waveTimer = new QTimer(&window);
+    QObject::connect(waveTimer, &QTimer::timeout, [&window, calendar]() {
+        window.wavePhase += 0.03;
+        window.update();
+        calendar->setWavePhase(window.wavePhase);
+    });
+    waveTimer->start(33);
+
     mainLayout->addLayout(headerLayout);
     mainLayout->addWidget(calendar);
 
