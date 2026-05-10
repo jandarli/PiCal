@@ -8,13 +8,30 @@
 #include <QTimer>
 #include <QPushButton>
 #include <QTextCharFormat>
+#include <QPainter>
 
 #include "customcalendar.h"
+#include "pspwaves.h"
+
+
+// Create widget class
+class PicalWindow : public QWidget {
+public:
+    double wavePhase = 0.0;
+    explicit PicalWindow(QWidget *parent = nullptr) : QWidget(parent) {
+        setAttribute(Qt::WA_OpaquePaintEvent);
+    }
+protected:
+    void paintEvent(QPaintEvent *) override {
+        QPainter painter(this);
+        drawPSPWaves(&painter, rect(), rect(), wavePhase);
+    }
+};
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
-    QWidget window;
-    window.setStyleSheet("background-color: #8B0000; color: white; font-family: 'monospace'; font-size: 22px;");
+    PicalWindow window;
+    window.setStyleSheet("color: white; font-family: 'monospace'; font-size: 22px;");
 
     QVBoxLayout *mainLayout = new QVBoxLayout(&window);
     QHBoxLayout *headerLayout = new QHBoxLayout();
