@@ -26,26 +26,33 @@ inline void drawPSPWaves(QPainter *painter, const QRect &clipRect, const QRect &
     for (const auto &b : bands) {
         const double cy  = canvasRect.top() + b.yFrac * H;
         const double amp = b.ampFrac * H;
-        const double bw  = H * 0.07;
+        const double bw  = H * 0.02;
 
         QPainterPath path;
         for (int x = 0; x <= static_cast<int>(W); ++x) {
             double y = cy + amp * std::sin(2.0 * M_PI * b.freq * x / W - phase);
-            if (x == 0) path.moveTo(canvasRect.left() + x, y);
-            else        path.lineTo(canvasRect.left() + x, y);
+            if (x == 0) {
+                path.moveTo(canvasRect.left() + x, y);
+            } else {
+                path.lineTo(canvasRect.left() + x, y);
+            }
         }
+
         for (int x = static_cast<int>(W); x >= 0; --x) {
             double y = cy + amp * std::sin(2.0 * M_PI * b.freq * x / W - phase) + bw;
             path.lineTo(canvasRect.left() + x, y);
         }
+
         path.closeSubpath();
 
         // Fade the band in/out vertically so edges are soft rather than hard-cut
         QLinearGradient grad(0, cy - amp, 0, cy + amp + bw);
+        
         grad.setColorAt(0.0, QColor(230, 110, 110, 0));
         grad.setColorAt(0.3, QColor(230, 110, 110, b.alpha));
         grad.setColorAt(0.7, QColor(230, 110, 110, b.alpha));
         grad.setColorAt(1.0, QColor(230, 110, 110, 0));
+
         painter->fillPath(path, grad);
     }
 
