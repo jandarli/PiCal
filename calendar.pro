@@ -3,4 +3,5 @@ TARGET = my_calendar
 TEMPLATE = app
 SOURCES += main.cpp \
            customcalendar.cpp
-HEADERS += customcalendar.h
+HEADERS += customcalendar.h \
+           pspwaves.h
